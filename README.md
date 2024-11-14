@@ -9,14 +9,8 @@ Improvement of [bash-rollback](https://github.com/siilike/bash-rollback.git)
 ```bash
 source rollback.sh
 
-# Create something and register its cleanup
-touch /tmp/test.txt
-rb "rm -f /tmp/test.txt"
-
-# If script fails after this point, it will automatically:
-# 1. Detect the failure
-# 2. Execute registered rollbacks in reverse order
-# 3. Report any rollback failures
+touch /tmp/test.txt # if this fails
+rb "rm -f /tmp/test.txt" # this will be executed
 ```
 
 Features:
@@ -60,4 +54,3 @@ source rollback.sh
 # Remote
 source <(curl -s https://raw.githubusercontent.com/eznix86/bash-rollback/main/rollback.sh)
 ```
-
