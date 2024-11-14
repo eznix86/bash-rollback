@@ -26,13 +26,28 @@ Features:
 #!/bin/bash
 source rollback.sh
 
-kubectl create namespace test
-rb "kubectl delete namespace test"
+mkdir -p /tmp/test
+rb "rm -rf /tmp/test"
 
-kubectl apply -f deployment.yaml
-rb "kubectl delete -f deployment.yaml"
+# Create a file and add content
+echo "test content" > /tmp/test/file.txt
+rb "rm -f /tmp/test/file.txt"
 
-# If anything fails, both resources are cleaned up in reverse order
+# Start a background process
+nohup tail -f /dev/null > /tmp/test/output.log 2>&1 & 
+PID=$!
+rb "kill $PID"
+
+# Download a file
+wget https://example.com/file -O /tmp/test/downloaded.txt
+rb "rm -f /tmp/test/downloaded.txt"
+
+# Create and modify permissions
+touch /tmp/test/secure.txt
+chmod 600 /tmp/test/secure.txt
+rb "rm -f /tmp/test/secure.txt"
+
+# If any command fails, everything gets rollback in reverse order
 ```
 
 ## Installation
